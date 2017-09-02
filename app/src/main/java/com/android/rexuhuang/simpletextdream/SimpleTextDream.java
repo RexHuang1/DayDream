@@ -58,7 +58,7 @@ public class SimpleTextDream extends DreamService {
      */
     public static class ScreensaverMoveSaverRunnable implements Runnable {
 
-        static final long MOVE_DELAY = 6000; // DeskClock.SCREEN_SAVER_MOVE_DELAY;
+        static final long MOVE_DELAY = 7000; // DeskClock.SCREEN_SAVER_MOVE_DELAY;
         static final long SLIDE_TIME = 1000;
         static final long FADE_TIME = 3000;
 
@@ -128,6 +128,8 @@ public class SimpleTextDream extends DreamService {
                     Animator fadeout = ObjectAnimator.ofFloat(mSaverView, "alpha", 1f, 0f);
                     Animator fadein = ObjectAnimator.ofFloat(mSaverView, "alpha", 0f, 1f);
 
+                    Animator rotate = ObjectAnimator.ofFloat(mSaverView,"rotation",0.0f,360.0f);
+
 
                     if (SLIDE) {
                         s.play(xMove).with(yMove);
@@ -144,11 +146,12 @@ public class SimpleTextDream extends DreamService {
                         fadeout.setDuration(FADE_TIME).setInterpolator(accel);
                         grow.setDuration(FADE_TIME).setInterpolator(decel);
                         fadein.setDuration(FADE_TIME).setInterpolator(decel);
+                        rotate.setDuration(FADE_TIME).setInterpolator(decel);
                         s.play(shrink);
-                        s.play(fadeout);
+                        s.play(fadeout).with(rotate);
                         s.play(xMove.setDuration(0)).after(FADE_TIME);
                         s.play(yMove.setDuration(0)).after(FADE_TIME);
-                        s.play(fadein).after(FADE_TIME);
+                        s.play(fadein).after(FADE_TIME).with(rotate);
                         s.play(grow).after(FADE_TIME);
                     }
                     s.start();
